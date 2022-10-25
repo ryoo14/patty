@@ -13,8 +13,10 @@ new Command()
   .command("create <dir:string>", "Create a tmp but non-git managed directory.")
   .action((_, dir) => create(dir))
   // Get
-  .command("get", "Get a git repository from GitHub or GitLab.")
-  .action(() => get())
+  .command("get <url:string>", "Get a git repository from GitHub or GitLab.")
+  .example("full url", "patty get https://github.com/ryoo14/patty")
+  .example("short url", "patty get github.com/ryoo14/patty")
+  .action((_, url) => get(url))
   // List
   .command("list", "Print git and tmp directories.")
   .option("-f, --full-path", "Print full paths instead of relative paths.")
@@ -42,8 +44,8 @@ const create = (dir: string) => {
   ensureDir(targetDir);
 };
 
-const get = () => {
-  console.log("get");
+const get = (url: string) => {
+  console.log(url);
 };
 
 const list = (option) => {
