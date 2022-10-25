@@ -5,6 +5,7 @@ new Command()
   .name("patty")
   .version("0.1.0")
   .description("a CLI tool for managing git and tmp directories written in Deno.")
+  .default("help")
   // Create
   .command("create", "Create a tmp but non-git managed directory.")
   .action(() => create())
