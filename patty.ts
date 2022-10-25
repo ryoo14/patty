@@ -1,4 +1,6 @@
 import { Command, HelpCommand } from "https://deno.land/x/cliffy@v0.25.2/command/mod.ts";
+import { join } from "https://deno.land/std/path/mod.ts";
+import { ensureDir } from "https://deno.land/std/fs/ensure_dir.ts";
 
 
 new Command()
@@ -7,8 +9,8 @@ new Command()
   .description("a CLI tool for managing git and tmp directories written in Deno.")
   .default("help")
   // Create
-  .command("create", "Create a tmp but non-git managed directory.")
-  .action(() => create())
+  .command("create <dir:string>", "Create a tmp but non-git managed directory.")
+  .action((_, dir) => create(dir))
   // Get
   .command("get", "Get a git repository from GitHub or GitLab.")
   .action(() => get())
@@ -27,8 +29,9 @@ const getPattyRoot = () => {
   return pattyRoot ? pattyRoot : Deno.env.get("HOME") + "/patty";
 }
 
-const create = () => {
-  console.log("create");
+const create = (dir: string) => {
+  const targetDir = join(getPattyRoot(), dir, ".patty");
+  ensureDir(targetDir);
 };
 
 const get = () => {
