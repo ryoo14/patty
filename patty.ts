@@ -1,7 +1,7 @@
 import dir from "https://deno.land/x/dir@1.5.1/mod.ts";
 import { Command, HelpCommand } from "https://deno.land/x/cliffy@v0.25.2/command/mod.ts";
-import { ensureDir } from "https://deno.land/std@0.160.0/fs/mod.ts";
-import { join } from "https://deno.land/std@0.160.0/path/mod.ts";
+import { ensureDir, walk } from "https://deno.land/std@0.160.0/fs/mod.ts";
+import { dirname, join, relative } from "https://deno.land/std@0.160.0/path/mod.ts";
 
 
 new Command()
@@ -16,6 +16,7 @@ new Command()
   .command("get <url:string>", "Get a git repository from GitHub or GitLab.")
   .example("full url", "patty get https://github.com/ryoo14/patty")
   .example("short url", "patty get github.com/ryoo14/patty")
+  // TODO: implement
   .action((_, url) => get(url))
   // List
   .command("list", "Print git and tmp directories.")
@@ -27,6 +28,7 @@ new Command()
   .command("help", new HelpCommand())
   .parse();
 
+// utility functions
 const getPattyRoot = () => {
   const home = dir("home");
   const homePattyRoot = home ? join(home, "patty") : undefined;
@@ -39,6 +41,24 @@ const getPattyRoot = () => {
   }
 };
 
+const getPattyDirs = async () => {
+  const walkOptions = {
+    maxDepth: 4,
+    includeFiles: false,
+    includeDirs: true,
+    match: [RegExp(/\.(git|patty)$/)],
+  };
+
+  const pattySet = new Set();
+
+  for await (const l of walk(getPattyRoot(), walkOptions)) {
+    pattySet.add(dirname(l.path));
+  }
+
+  return pattySet;
+}
+
+// commands functions
 const create = (dir: string) => {
   const targetDir = join(getPattyRoot(), dir, ".patty");
   ensureDir(targetDir);
@@ -48,8 +68,19 @@ const get = (url: string) => {
   console.log(url);
 };
 
-const list = (option) => {
-  console.log("list");
+const list = async (option) => {
+  const pattySet = await getPattyDirs();
+
+  // for!for!
+  if (option.fullPath) {
+    for (const l of pattySet) {
+      console.log(l);
+    }
+  } else {
+    for (const l of pattySet) {
+      console.log(relative(getPattyRoot(), l));
+    }
+  }
 };
 
 const root = () => {
