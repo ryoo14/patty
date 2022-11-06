@@ -13,11 +13,11 @@ new Command()
   .command("create <dir:string>", "Create a tmp but non-git managed directory.")
   .action((_, dir) => create(dir))
   // Get
-  .command("get <url:string>", "Get a git repository from GitHub or GitLab.")
+  .command("get <url:string>", "Get a git repository from remote repository services.")
+  .option("-d, --depth <depth:number>", "Create a shallow clone of that depth.")
   .example("full url", "patty get https://github.com/ryoo14/patty")
   .example("short url", "patty get github.com/ryoo14/patty")
-  // TODO: implement
-  .action((_, url) => get(url))
+  .action((options, url) => get(options, url))
   // List
   .command("list", "Print git and tmp directories.")
   .option("-f, --full-path", "Print full paths instead of relative paths.")
@@ -64,8 +64,23 @@ const create = (dir: string) => {
   ensureDir(targetDir);
 };
 
-const get = (url: string) => {
-  console.log(url);
+const get = async (options, url: string) => {
+  const depth_option = options.depth ? `--depth ${options.depth}`: "";
+
+  const https = url.match(/^(https|git):\/\//);
+  let proto, uri: string;
+  if (https) {
+    [proto, uri] = url.split("://");
+  } else {
+    [proto, uri] = ["https", url];
+  }
+  const pattyRoot = getPattyRoot();
+  const command = `git clone ${depth_option} ${proto}://${uri} ${pattyRoot}/${uri}`;
+  const p = Deno.run({
+    cmd: ["bash", "-c", command]
+  });
+
+  await p.status();
 };
 
 const list = async (option) => {
