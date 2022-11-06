@@ -1,0 +1,27 @@
+- name: Denopendabot
+  # You may pin to the exact commit or the version.
+  # uses: hasundue/denopendabot@a7556c8c3eb84ccac788ae1f7c4739913e80e7fd
+  uses: hasundue/denopendabot@0.11.0
+  with:
+    # Run mode ('action' or 'app')
+    mode: action # default is action
+    # Access token authorized to run workflows (for Action)
+    token: # optional
+    # Personal access token authorized to update workflows (for Action)
+    user-token: # optional
+    # Repository to update dependencies
+    repository: # default is ${{ github.repository }}
+    # Branch to update
+    base-branch: # default is main
+    # Working branch for Denopendabot
+    working-branch: # default is denopendabot
+    # Specify Files to update (space-separated)
+    include: # optional
+    # Files to exclude (space-separated)
+    exclude: # optional
+    # Labels for the pull request (space-separated)
+    labels: # optional
+    # Bump the project version to this value for a release
+    release: # optional
+    # Merge a pull request automaticaly ('any' or null, for App)
+    auto-merge: # optional
