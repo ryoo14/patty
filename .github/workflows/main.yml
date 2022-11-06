@@ -1,0 +1,2 @@
+- name: Denopendabot
+  uses: hasundue/denopendabot@0.11.0
