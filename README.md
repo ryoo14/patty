@@ -1,5 +1,9 @@
 # Patty
-`patty` is a CLI tool for managing git and tmp directories written in Deno.
+`patty` is a CLI tool for managing git and working directories written in Deno.
+
+It is useful to work with interactive filtering tools such as [fzf](https://github.com/junegunn/fzf) and [peco](https://github.com/peco/peco).
+
+Inspired by [ghq](https://github.com/x-motemen/ghq).
 
 ## Installation
 
@@ -14,7 +18,7 @@ deno install --allow-read --allow-write --allow-env --allow-run https://deno.lan
 
   Description:
 
-    a CLI tool for managing git and tmp directories written in Deno.
+    a CLI tool for managing git and working directories written in Deno.
 
   Options:
 
@@ -23,12 +27,14 @@ deno install --allow-read --allow-write --allow-env --allow-run https://deno.lan
 
   Commands:
 
-    create  <dir>      - Create a tmp but non-git managed directory.
+    create  <dir>      - Create a working but non-git managed directory.
     get     <url>      - Get a git repository from remote repository services.
-    list               - Print git and tmp directories.
+    list               - Print git and working directories.
     root               - Print root path on patty's configuration.
     help    [command]  - Show this help or the help of a sub-command.
 ```
+
+The `patty create` command creates the specified directory under the root directory and also creates a `.patty` directory. `patty` recognizes the directory containing the `.git` or `.patty` directory as a working directory.
 
 ## Environment Variable
 

@@ -7,10 +7,10 @@ import { dirname, join, relative } from "https://deno.land/std@0.162.0/path/mod.
 new Command()
   .name("patty")
   .version("0.1.0")
-  .description("a CLI tool for managing git and tmp directories written in Deno.")
+  .description("a CLI tool for managing git and working directories written in Deno.")
   .default("help")
   // Create
-  .command("create <dir:string>", "Create a tmp but non-git managed directory.")
+  .command("create <dir:string>", "Create a working but non-git managed directory.")
   .action((_, dir) => create(dir))
   // Get
   .command("get <url:string>", "Get a git repository from remote repository services.")
@@ -19,7 +19,7 @@ new Command()
   .example("short url", "patty get github.com/ryoo14/patty")
   .action((options, url) => get(options, url))
   // List
-  .command("list", "Print git and tmp directories.")
+  .command("list", "Print git and working directories.")
   .option("-f, --full-path", "Print full paths instead of relative paths.")
   .action((option) => list(option))
   // Root
