@@ -4,7 +4,7 @@
 ## Installation
 
 ```sh
-deno install --allow-read --allow-write --allow-env --allow-run https://deno.land/x/patty@0.1.0/patty.ts
+deno install --allow-read --allow-write --allow-env --allow-run https://deno.land/x/patty@0.1.2/patty.ts
 ```
 
 ## Usage
