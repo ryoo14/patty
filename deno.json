@@ -2,5 +2,15 @@
   "tasks": {
     "run": "deno run --allow-read --allow-write --allow-env --allow-run patty.ts",
     "dev": "deno fmt && deno lint"
+  },
+
+  "fmt": {
+    "files": {
+      "exclude": ["README.md"]
+    },
+    "options": {
+      "useTabs": false,
+      "lineWidth": 160
+    }
   }
 }
