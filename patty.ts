@@ -3,7 +3,6 @@ import { Command, HelpCommand } from "https://deno.land/x/cliffy@v0.25.4/command
 import { ensureDir, walk } from "https://deno.land/std@0.163.0/fs/mod.ts";
 import { dirname, join, relative } from "https://deno.land/std@0.163.0/path/mod.ts";
 
-
 new Command()
   .name("patty")
   .version("0.1.3")
@@ -56,7 +55,7 @@ const getPattyDirs = async () => {
   }
 
   return pattySet;
-}
+};
 
 // commands functions
 const create = (dir: string) => {
@@ -65,7 +64,7 @@ const create = (dir: string) => {
 };
 
 const get = async (options, url: string) => {
-  const depth_option = options.depth ? `--depth ${options.depth}`: "";
+  const depth_option = options.depth ? `--depth ${options.depth}` : "";
 
   const https = url.match(/^(https|git):\/\//);
   let proto, uri: string;
@@ -77,7 +76,7 @@ const get = async (options, url: string) => {
   const pattyRoot = getPattyRoot();
   const command = `git clone ${depth_option} ${proto}://${uri} ${pattyRoot}/${uri}`;
   const p = Deno.run({
-    cmd: ["bash", "-c", command]
+    cmd: ["bash", "-c", command],
   });
 
   await p.status();
@@ -101,4 +100,3 @@ const list = async (option) => {
 const root = () => {
   console.log(getPattyRoot());
 };
-
