@@ -9,14 +9,14 @@ Inspired by [ghq](https://github.com/x-motemen/ghq).
 ## Installation
 
 ```sh
-deno install --allow-read --allow-write --allow-env --allow-run https://deno.land/x/patty@0.1.3/patty.ts
+deno install --allow-read --allow-write --allow-env --allow-run https://deno.land/x/patty@0.1.4/patty.ts
 ```
 
 ## Usage
 
 ```
   Usage:   patty
-  Version: 0.1.3
+  Version: 0.1.4
 
   Description:
 
