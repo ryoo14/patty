@@ -1,4 +1,5 @@
 # Patty
+
 `patty` is a CLI tool for managing git and working directories written in Deno.
 
 It is useful to work with interactive filtering tools such as [fzf](https://github.com/junegunn/fzf) and [peco](https://github.com/peco/peco).
@@ -12,6 +13,7 @@ deno install --allow-read --allow-write --allow-env --allow-run https://deno.lan
 ```
 
 ## Usage
+
 ```
   Usage:   patty
   Version: 0.1.3
@@ -34,7 +36,8 @@ deno install --allow-read --allow-write --allow-env --allow-run https://deno.lan
     help    [command]  - Show this help or the help of a sub-command.
 ```
 
-The `patty create` command creates the specified directory under the root directory and also creates a `.patty` directory. `patty` recognizes the directory containing the `.git` or `.patty` directory as a working directory.
+The `patty create` command creates the specified directory under the root directory and also creates a `.patty` directory.
+`patty` recognizes the directory containing the `.git` or `.patty` directory as a working directory.
 
 ## Environment Variable
 
