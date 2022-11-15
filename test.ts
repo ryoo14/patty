@@ -1,7 +1,7 @@
 import {
   assertEquals,
   assertMatch,
-} from "https://deno.land/std@0.163.0/testing/asserts.ts";
+} from "https://deno.land/std@0.164.0/testing/asserts.ts";
 import { CommandBuilder } from "https://deno.land/x/dax@0.15.0/mod.ts";
 
 
