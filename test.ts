@@ -30,7 +30,7 @@ Deno.test("root", async () => {
 
 // get
 Deno.test("get", async () => {
-  await builder.command("patty get https://github.com/ryoo14/patty").spawn();
+  await builder.command("patty get -q https://github.com/ryoo14/patty").spawn();
   assertEquals(
     await builder.command("ls $PATTY_ROOT/github.com/ryoo14").text(),
     "patty",
