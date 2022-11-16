@@ -19,3 +19,4 @@ jobs:
           base-branch: main 
           working-branch: denopendabot
           labels: dependencies
+          auto-merge: any
