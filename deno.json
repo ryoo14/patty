@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno fmt && deno lint",
+    "dev": "deno fmt && deno lint && deno task test --fail-fast",
     "run": "deno run --allow-read --allow-write --allow-env --allow-run patty.ts",
     "test": "deno test --allow-read --allow-write --allow-env --allow-run --allow-net"
   },
