@@ -1,9 +1,5 @@
-import {
-  assertEquals,
-  assertMatch,
-} from "https://deno.land/std@0.164.0/testing/asserts.ts";
+import { assertEquals, assertMatch } from "https://deno.land/std@0.164.0/testing/asserts.ts";
 import { CommandBuilder } from "https://deno.land/x/dax@0.15.0/mod.ts";
-
 
 const cwd = Deno.cwd();
 const tmpDir = Deno.makeTempDirSync();
@@ -48,13 +44,13 @@ Deno.test("create", async () => {
 
 // list
 Deno.test("shortList", async () => {
-  const result  = await builder.command("patty list").text();
+  const result = await builder.command("patty list").text();
   assertMatch(result, /github.com\/ryoo14\/patty/);
   assertMatch(result, /create\/testDir/);
 });
 
 Deno.test("fullList", async () => {
-  const result  = await builder.command("patty list --full-path").text();
+  const result = await builder.command("patty list --full-path").text();
   assertMatch(result, new RegExp(`${tmpDir}/patty/github.com/ryoo14/patty`));
   assertMatch(result, new RegExp(`${tmpDir}/patty/create/testDir`));
 });
