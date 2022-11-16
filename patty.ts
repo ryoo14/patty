@@ -14,6 +14,7 @@ new Command()
   // Get
   .command("get <url:string>", "Get a git repository from remote repository services.")
   .option("-d, --depth <depth:number>", "Create a shallow clone of that depth.")
+  .option("-q, --quiet", "Suppress output.")
   .example("full url", "patty get https://github.com/ryoo14/patty")
   .example("short url", "patty get github.com/ryoo14/patty")
   .action((options, url) => get(options, url))
@@ -64,7 +65,16 @@ const create = (dir: string) => {
 };
 
 const get = async (options, url: string) => {
-  const depth_option = options.depth ? `--depth ${options.depth}` : "";
+  const gitOptions: Array<string> = [];
+  for (const [key, value] of Object.entries(options)) {
+    if (value) {
+      if (value === true) {
+        gitOptions.push(`--${key}`);
+      } else {
+        gitOptions.push(`--${key} ${value}`);
+      }
+    }
+  }
 
   const https = url.match(/^(https|git):\/\//);
   let proto, uri: string;
@@ -74,7 +84,7 @@ const get = async (options, url: string) => {
     [proto, uri] = ["https", url];
   }
   const pattyRoot = getPattyRoot();
-  const command = `git clone ${depth_option} ${proto}://${uri} ${pattyRoot}/${uri}`;
+  const command = `git clone ${gitOptions.join(" ")} ${proto}://${uri} ${pattyRoot}/${uri}`;
   const p = Deno.run({
     cmd: ["bash", "-c", command],
   });
