@@ -1,4 +1,4 @@
-import { assertEquals, assertMatch } from "https://deno.land/std@0.166.0/testing/asserts.ts";
+import { assertEquals, assertMatch, assertNotMatch } from "https://deno.land/std@0.166.0/testing/asserts.ts";
 import { CommandBuilder } from "https://deno.land/x/dax@0.15.0/mod.ts";
 
 const tmpDir = Deno.makeTempDirSync();
@@ -52,6 +52,14 @@ Deno.test("fullList", async () => {
   const result = await builder.command("deno run -A patty.ts list --full-path").text();
   assertMatch(result, new RegExp(`${tmpDir}/patty/github.com/ryoo14/patty`));
   assertMatch(result, new RegExp(`${tmpDir}/patty/create/testDir`));
+});
+
+Deno.test("depthList", async () => {
+  await builder.command("deno run -A patty.ts create create/hoge/fuga/depthTestDir").spawn();
+  let result = await builder.command("deno run -A patty.ts list").text();
+  assertNotMatch(result, /create\/hoge\/fuga\/depthTestDir/);
+  result = await builder.command("deno run -A patty.ts list -d 5").text();
+  assertMatch(result, /create\/hoge\/fuga\/depthTestDir/);
 });
 
 Deno.removeSync(tmpDir, { recursive: true });
