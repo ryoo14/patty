@@ -21,6 +21,7 @@ new Command()
   // List
   .command("list", "Print git and working directories.")
   .option("-f, --full-path", "Print full paths instead of relative paths.")
+  .option("-d, --depth <depth:number>", "Specify how many layers of git and tmp directories to target.")
   .action((option) => list(option))
   // Root
   .command("root", "Print root path on patty's configuration.")
@@ -41,9 +42,9 @@ const getPattyRoot = () => {
   }
 };
 
-const getPattyDirs = async () => {
+const getPattyDirs = async (depth = 4) => {
   const walkOptions = {
-    maxDepth: 4,
+    maxDepth: depth,
     includeFiles: false,
     includeDirs: true,
     match: [RegExp(/\.(git|patty)$/)],
@@ -93,7 +94,7 @@ const get = async (options, url: string) => {
 };
 
 const list = async (option) => {
-  const pattySet = await getPattyDirs();
+  const pattySet = await getPattyDirs(option.depth);
 
   // for!for!
   if (option.fullPath) {
