@@ -13,16 +13,16 @@ new Command()
   .action((_, dir) => create(dir))
   // Get
   .command("get <url:string>", "Get a git repository from remote repository services.")
+  .option("-b, --branch <branch:string>", "Get Specified branch.")
   .option("-d, --depth <depth:number>", "Create a shallow clone of that depth.")
   .option("-q, --quiet", "Suppress output.")
-  .option("-b, --branch <branch:string>", "Get Specified branch.")
   .example("full url", "patty get https://github.com/ryoo14/patty")
   .example("short url", "patty get github.com/ryoo14/patty")
   .action((options, url) => get(options, url))
   // List
   .command("list", "Print git and working directories.")
-  .option("-f, --full-path", "Print full paths instead of relative paths.")
   .option("-d, --depth <depth:number>", "Specify how many layers of git and tmp directories to target.")
+  .option("-f, --full-path", "Print full paths instead of relative paths.")
   .action((option) => list(option))
   // Root
   .command("root", "Print root path on patty's configuration.")
