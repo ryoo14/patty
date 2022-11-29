@@ -24,12 +24,22 @@ Deno.test("root", async () => {
 });
 
 // get
-Deno.test("get", async () => {
+Deno.test("getDefault", async () => {
   await builder.command("deno run -A patty.ts get -q https://github.com/ryoo14/patty").spawn();
   assertEquals(
     await builder.command("ls $PATTY_ROOT/github.com/ryoo14").text(),
     "patty",
   );
+});
+
+Deno.test("getSpecifiedBranch", async () => {
+  await builder.command("deno run -A patty.ts get -b test_branch -q https://github.com/ryoo14/test_repo").spawn();
+  const cwd = Deno.cwd();
+  Deno.chdir(`${tmpDir}/patty/github.com/ryoo14/test_repo`);
+  const branches = await builder.command("git branch").lines();
+  assertEquals(branches.length, 1);
+  assertEquals(branches[0], "* test_branch");
+  Deno.chdir(cwd);
 });
 
 // create
