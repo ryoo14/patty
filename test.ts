@@ -1,5 +1,5 @@
 import { assertEquals, assertMatch, assertNotMatch } from "https://deno.land/std@0.167.0/testing/asserts.ts";
-import { CommandBuilder } from "https://deno.land/x/dax@0.15.0/mod.ts";
+import { CommandBuilder } from "https://deno.land/x/dax@0.16.0/mod.ts";
 
 const tmpDir = Deno.makeTempDirSync();
 Deno.mkdirSync(`${tmpDir}/patty`);
