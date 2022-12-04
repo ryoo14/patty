@@ -1,5 +1,5 @@
 import dir from "https://deno.land/x/dir@1.5.1/mod.ts";
-import { Command, HelpCommand } from "https://deno.land/x/cliffy@v0.25.4/command/mod.ts";
+import { Command, HelpCommand } from "https://deno.land/x/cliffy@v0.25.5/command/mod.ts";
 import { ensureDir, walk } from "https://deno.land/std@0.167.0/fs/mod.ts";
 import { dirname, join, relative } from "https://deno.land/std@0.167.0/path/mod.ts";
 
