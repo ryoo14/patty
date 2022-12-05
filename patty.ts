@@ -78,20 +78,20 @@ const get = async (options, url: string) => {
     }
   }
 
-  const https = url.match(/^(https|git):\/\//);
-  let proto, uri: string;
-  if (https) {
-    [proto, uri] = url.split("://");
+  const scheme_flag = url.match(/^(https|git):\/\//);
+  let scheme, authority: string;
+  if (scheme_flag) {
+    [scheme, authority] = url.split("://");
   } else {
-    [proto, uri] = ["https", url];
+    [scheme, authority] = ["https", url];
   }
   const pattyRoot = getPattyRoot();
-  const command = `git clone ${gitOptions.join(" ")} ${proto}://${uri} ${pattyRoot}/${uri}`;
-  const p = Deno.run({
+  const command = `git clone ${gitOptions.join(" ")} ${scheme}://${authority} ${pattyRoot}/${authority}`;
+  const gitProcess = Deno.run({
     cmd: ["bash", "-c", command],
   });
 
-  await p.status();
+  await gitProcess.status();
 };
 
 const list = async (option) => {
