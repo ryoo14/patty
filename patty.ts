@@ -60,6 +60,27 @@ const getPattyDirs = async (depth = 4) => {
   return pattySet;
 };
 
+async function repositoryExists(user: string, repo: string): Promise<string> {
+  let authority = "";
+  const remoteRepositoryServices = {
+    "github.com": `https://api.github.com/repos/${user}/${repo}`,
+    "gitlab.com": `https://gitlab.com/api/v4/projects/${user}%2F${repo}`,
+  };
+  try {
+    for (const service of Object.keys(remoteRepositoryServices)) {
+      const response = await fetch(remoteRepositoryServices[service]);
+      if (response.status < 300) {
+        authority = `${service}/${user}/${repo}`;
+        break;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    Deno.exit(1);
+  }
+  return authority;
+}
+
 // commands functions
 const create = (dir: string) => {
   const targetDir = join(getPattyRoot(), dir, ".patty");
@@ -83,7 +104,20 @@ const get = async (options, url: string) => {
   if (scheme_flag) {
     [scheme, authority] = url.split("://");
   } else {
-    [scheme, authority] = ["https", url];
+    // TODO: function
+    const slashNum = url.match(/\//g).length;
+    if (slashNum === 2) {
+      [scheme, authority] = ["https", url];
+    } else if (slashNum === 1) {
+      const [user, repo] = url.split("/");
+      [scheme, authority] = ["https", await repositoryExists(user, repo)];
+      if (!authority) {
+        console.log(
+          "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
+        );
+        Deno.exit(1);
+      }
+    }
   }
   const pattyRoot = getPattyRoot();
   const command = `git clone ${gitOptions.join(" ")} ${scheme}://${authority} ${pattyRoot}/${authority}`;

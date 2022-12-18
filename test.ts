@@ -27,19 +27,27 @@ Deno.test("root", async () => {
 Deno.test("getDefault", async () => {
   await builder.command("deno run -A patty.ts get -q https://github.com/ryoo14/patty").spawn();
   assertEquals(
-    await builder.command("ls $PATTY_ROOT/github.com/ryoo14").text(),
-    "patty",
+    await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/patty").text(),
+    `${tmpDir}/patty/github.com/ryoo14/patty`,
+  );
+});
+
+Deno.test("getOnlyUserAndRepo", async () => {
+  await builder.command("deno run -A patty.ts get -q ryoo14/test_repo").spawn();
+  assertEquals(
+    await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/test_repo").text(),
+    `${tmpDir}/patty/github.com/ryoo14/test_repo`,
   );
 });
 
 Deno.test("getSpecifiedBranch", async () => {
+  // TODO: あまりにもひどいけど思いつかないのでmvで退避
+  await builder.command("mv $PATTY_ROOT/github.com/ryoo14/test_repo $PATTY_ROOT/github.com/ryoo14/test_repo_old");
+
   await builder.command("deno run -A patty.ts get -b test_branch -q https://github.com/ryoo14/test_repo").spawn();
-  const cwd = Deno.cwd();
-  Deno.chdir(`${tmpDir}/patty/github.com/ryoo14/test_repo`);
-  const branches = await builder.command("git branch").lines();
+  const branches = await builder.command("git -C $PATTY_ROOT/github.com/ryoo14/test_repo branch").lines();
   assertEquals(branches.length, 1);
   assertEquals(branches[0], "* test_branch");
-  Deno.chdir(cwd);
 });
 
 // create
