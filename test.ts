@@ -1,17 +1,17 @@
-import { assertEquals, assertNotEquals, assertMatch, assertNotMatch } from "https://deno.land/std@0.170.0/testing/asserts.ts";
+import { assertEquals, assertMatch, assertNotEquals } from "https://deno.land/std@0.170.0/testing/asserts.ts";
 import { CommandBuilder } from "https://deno.land/x/dax@0.17.0/mod.ts";
 
-async function pattyTest(
+function pattyTest(
   testName: string,
   fn: () => void | Promise<void>,
 ) {
-    Deno.test(testName, async () => {
-      const tmpDir = Deno.makeTempDirSync();
-      Deno.mkdirSync(`${tmpDir}/patty`);
-      await builder.command(`export PATTY_ROOT=${tmpDir}/patty`).exportEnv();
-      await fn();
-      Deno.removeSync(tmpDir, { recursive: true });
-    });
+  Deno.test(testName, async () => {
+    const tmpDir = Deno.makeTempDirSync();
+    Deno.mkdirSync(`${tmpDir}/patty`);
+    await builder.command(`export PATTY_ROOT=${tmpDir}/patty`).exportEnv();
+    await fn();
+    Deno.removeSync(tmpDir, { recursive: true });
+  });
 }
 
 const builder = new CommandBuilder();
@@ -28,17 +28,17 @@ pattyTest("help", async () => {
 pattyTest("root", async () => {
   assertMatch(
     await builder.command("deno run -A patty.ts root").text(),
-    /\/patty/
+    /\/patty/,
   );
 });
 
 // get
 pattyTest("getDefault", async () => {
- await builder.command("deno run -A patty.ts get -q https://github.com/ryoo14/patty").spawn();
- assertMatch(
-   await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/patty").text(),
-   /\/patty\/github.com\/ryoo14\/patty/,
- );
+  await builder.command("deno run -A patty.ts get -q https://github.com/ryoo14/patty").spawn();
+  assertMatch(
+    await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/patty").text(),
+    /\/patty\/github.com\/ryoo14\/patty/,
+  );
 });
 
 pattyTest("getOnlyUserAndRepo", async () => {
@@ -85,4 +85,3 @@ pattyTest("depthList", async () => {
   result = await builder.command("deno run -A patty.ts list -d 5").text();
   assertEquals(result, "create/hoge/fuga/depthTestDir");
 });
-
