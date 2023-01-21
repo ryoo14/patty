@@ -65,6 +65,14 @@ pattyTest("create", async () => {
   );
 });
 
+pattyTest("createAndGitInit", async () => {
+  await builder.command("deno run -A patty.ts create -g create/testDir2").spawn();
+  assertMatch(
+    await builder.command("ls -a $PATTY_ROOT/create/testDir2").text(),
+    /\.git/,
+  );
+});
+
 // list
 pattyTest("shortList", async () => {
   await builder.command("deno run -A patty.ts create create/testDir").spawn();

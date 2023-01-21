@@ -10,7 +10,8 @@ new Command()
   .default("help")
   // Create
   .command("create <dir:string>", "Create a working but non-git managed directory.")
-  .action((_, dir) => create(dir))
+  .option("-g, --git-init", "Initialize git repository.")
+  .action((options, dir) => create(options, dir))
   // Get
   .command("get <url:string>", "Get a git repository from remote repository services.")
   .option("-b, --branch <branch:string>", "Get Specified branch.")
@@ -83,9 +84,18 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 }
 
 // commands functions
-const create = (dir: string) => {
-  const targetDir = join(getPattyRoot(), dir, ".patty");
-  ensureDir(targetDir);
+const create = async (options, dir: string) => {
+  const targetDir = join(getPattyRoot(), dir);
+  ensureDir(join(targetDir, ".patty"));
+
+  if (options.gitInit) {
+    const command = `git init -q ${targetDir}`;
+    const gitProcess = Deno.run({
+      cmd: ["bash", "-c", command],
+    });
+
+    await gitProcess.status();
+  }
 };
 
 const get = async (options, url: string) => {
