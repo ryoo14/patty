@@ -43,3 +43,11 @@ The `patty create` command creates the specified directory under the root direct
 
 - `PATTY_ROOT`
   - If this environment variable is set, `patty` will use it as the root path. If it is not set, it defaults to `$HOME/patty`.
+
+## LICENSE
+
+[MIT](https://github.com/ryoo14/patty/LICENSE)
+
+## Author
+
+[ryoo14](https://github.com/ryoo14)
