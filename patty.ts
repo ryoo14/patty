@@ -5,7 +5,7 @@ import { dirname, join, relative } from "https://deno.land/std@0.179.0/path/mod.
 
 new Command()
   .name("patty")
-  .version("0.7.0")
+  .version("0.7.1")
   .description("a CLI tool for managing git and working directories written in Deno.")
   .default("help")
   // Create
