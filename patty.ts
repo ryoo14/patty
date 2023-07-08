@@ -84,19 +84,21 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 }
 
 // commands functions
-const create = async (options, dir: string) => {
+const create = (options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir);
   ensureDir(join(targetDir, ".patty"));
 
   if (options.gitInit) {
     const command = `git init -q ${targetDir}`;
     const gitProcess = new Deno.Command(
-      "bash", {
+      "bash",
+      {
         args: [
           "-c",
-          command
+          command,
         ],
-    });
+      },
+    );
     gitProcess.spawn();
   }
 };
@@ -136,12 +138,14 @@ const get = async (options, url: string) => {
   const pattyRoot = getPattyRoot();
   const command = `git clone ${gitOptions.join(" ")} ${scheme}://${authority} ${pattyRoot}/${authority}`;
   const gitProcess = new Deno.Command(
-    "bash", {
+    "bash",
+    {
       args: [
         "-c",
-        command
+        command,
       ],
-  });
+    },
+  );
 
   gitProcess.spawn();
 };
