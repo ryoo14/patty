@@ -1,7 +1,7 @@
 import dir from "https://deno.land/x/dir@1.5.1/mod.ts";
 import { Command, HelpCommand } from "https://deno.land/x/cliffy@v0.25.7/command/mod.ts";
-import { ensureDir, walk } from "https://deno.land/std@0.199.0/fs/mod.ts";
-import { dirname, join, relative } from "https://deno.land/std@0.199.0/path/mod.ts";
+import { ensureDir, walk } from "https://deno.land/std@0.200.0/fs/mod.ts";
+import { dirname, join, relative } from "https://deno.land/std@0.200.0/path/mod.ts";
 
 new Command()
   .name("patty")
