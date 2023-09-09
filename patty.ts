@@ -121,7 +121,7 @@ const get = async (options, url: string) => {
     [scheme, authority] = url.split("://");
   } else {
     // TODO: function
-    const slashNum = url.match(/\//g).length;
+    const slashNum = url.match(/\//g)?.length;
     if (slashNum === 2) {
       [scheme, authority] = ["https", url];
     } else if (slashNum === 1) {
@@ -133,6 +133,11 @@ const get = async (options, url: string) => {
         );
         Deno.exit(1);
       }
+    } else {
+      console.log(
+        "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
+      );
+      Deno.exit(1);
     }
   }
   const pattyRoot = getPattyRoot();
