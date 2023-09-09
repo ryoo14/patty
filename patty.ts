@@ -39,7 +39,7 @@ type Options = {
   depth?: number;
   quiet?: boolean;
   fullPath?: boolean;
-}
+};
 
 type RemoteRepositoryServiceUrls = {
   [key: string]: string;
