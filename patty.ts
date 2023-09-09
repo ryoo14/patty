@@ -33,6 +33,14 @@ new Command()
   .parse();
 
 // types
+type Options = {
+  gitInit?: boolean;
+  branch?: string;
+  depth?: number;
+  quiet?: boolean;
+  fullPath?: boolean;
+}
+
 type RemoteRepositoryServiceUrls = {
   [key: string]: string;
 };
@@ -89,7 +97,7 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 }
 
 // commands functions
-const create = (options, dir: string) => {
+const create = (options: Options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir);
   ensureDir(join(targetDir, ".patty"));
 
@@ -108,7 +116,7 @@ const create = (options, dir: string) => {
   }
 };
 
-const get = async (options, url: string) => {
+const get = async (options: Options, url: string) => {
   const gitOptions: Array<string> = [];
   for (const [key, value] of Object.entries(options)) {
     if (value) {
@@ -160,7 +168,7 @@ const get = async (options, url: string) => {
   gitProcess.spawn();
 };
 
-const list = async (option) => {
+const list = async (option: Options) => {
   const pattySet: Set<string> = await getPattyDirs(option.depth);
 
   // for!for!
