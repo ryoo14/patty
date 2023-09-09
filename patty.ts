@@ -53,7 +53,7 @@ const getPattyDirs = async (depth = 4) => {
     match: [RegExp(/\.(git|patty)$/)],
   };
 
-  const pattySet = new Set();
+  const pattySet: Set<string> = new Set();
 
   for await (const l of walk(getPattyRoot(), walkOptions)) {
     pattySet.add(dirname(l.path));
@@ -156,7 +156,7 @@ const get = async (options, url: string) => {
 };
 
 const list = async (option) => {
-  const pattySet = await getPattyDirs(option.depth);
+  const pattySet: Set<string> = await getPattyDirs(option.depth);
 
   // for!for!
   if (option.fullPath) {
