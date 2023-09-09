@@ -32,6 +32,11 @@ new Command()
   .command("help", new HelpCommand())
   .parse();
 
+// types
+type RemoteRepositoryServiceUrls = {
+  [key: string]: string;
+};
+
 // utility functions
 const getPattyRoot = () => {
   const home = dir("home");
@@ -64,7 +69,7 @@ const getPattyDirs = async (depth = 4) => {
 
 async function repositoryExists(user: string, repo: string): Promise<string> {
   let authority = "";
-  const remoteRepositoryServices = {
+  const remoteRepositoryServices: RemoteRepositoryServiceUrls = {
     "github.com": `https://api.github.com/repos/${user}/${repo}`,
     "gitlab.com": `https://gitlab.com/api/v4/projects/${user}%2F${repo}`,
   };
