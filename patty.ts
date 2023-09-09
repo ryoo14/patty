@@ -32,6 +32,19 @@ new Command()
   .command("help", new HelpCommand())
   .parse();
 
+// types
+type Options = {
+  gitInit?: boolean;
+  branch?: string;
+  depth?: number;
+  quiet?: boolean;
+  fullPath?: boolean;
+};
+
+type RemoteRepositoryServiceUrls = {
+  [key: string]: string;
+};
+
 // utility functions
 const getPattyRoot = () => {
   const home = dir("home");
@@ -53,7 +66,7 @@ const getPattyDirs = async (depth = 4) => {
     match: [RegExp(/\.(git|patty)$/)],
   };
 
-  const pattySet = new Set();
+  const pattySet: Set<string> = new Set();
 
   for await (const l of walk(getPattyRoot(), walkOptions)) {
     pattySet.add(dirname(l.path));
@@ -64,7 +77,7 @@ const getPattyDirs = async (depth = 4) => {
 
 async function repositoryExists(user: string, repo: string): Promise<string> {
   let authority = "";
-  const remoteRepositoryServices = {
+  const remoteRepositoryServices: RemoteRepositoryServiceUrls = {
     "github.com": `https://api.github.com/repos/${user}/${repo}`,
     "gitlab.com": `https://gitlab.com/api/v4/projects/${user}%2F${repo}`,
   };
@@ -84,7 +97,7 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 }
 
 // commands functions
-const create = (options, dir: string) => {
+const create = (options: Options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir);
   ensureDir(join(targetDir, ".patty"));
 
@@ -103,7 +116,7 @@ const create = (options, dir: string) => {
   }
 };
 
-const get = async (options, url: string) => {
+const get = async (options: Options, url: string) => {
   const gitOptions: Array<string> = [];
   for (const [key, value] of Object.entries(options)) {
     if (value) {
@@ -121,7 +134,7 @@ const get = async (options, url: string) => {
     [scheme, authority] = url.split("://");
   } else {
     // TODO: function
-    const slashNum = url.match(/\//g).length;
+    const slashNum = url.match(/\//g)?.length;
     if (slashNum === 2) {
       [scheme, authority] = ["https", url];
     } else if (slashNum === 1) {
@@ -133,6 +146,11 @@ const get = async (options, url: string) => {
         );
         Deno.exit(1);
       }
+    } else {
+      console.log(
+        "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
+      );
+      Deno.exit(1);
     }
   }
   const pattyRoot = getPattyRoot();
@@ -150,8 +168,8 @@ const get = async (options, url: string) => {
   gitProcess.spawn();
 };
 
-const list = async (option) => {
-  const pattySet = await getPattyDirs(option.depth);
+const list = async (option: Options) => {
+  const pattySet: Set<string> = await getPattyDirs(option.depth);
 
   // for!for!
   if (option.fullPath) {
