@@ -1,4 +1,4 @@
-import { assertEquals, assertMatch, assertNotEquals } from "https://deno.land/std@0.201.0/testing/asserts.ts";
+import { assertEquals, assertMatch, assertNotEquals } from "https://deno.land/std@0.202.0/testing/asserts.ts";
 import { CommandBuilder } from "https://deno.land/x/dax@0.35.0/mod.ts";
 
 function pattyTest(
