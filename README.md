@@ -1,5 +1,9 @@
 # Patty
 
+<p align="center">
+  <img src="logo.svg" width="30%">
+</p>
+
 `patty` is a CLI tool for managing git and working directories written in Deno.
 
 It is useful to work with interactive filtering tools such as [fzf](https://github.com/junegunn/fzf) and [peco](https://github.com/peco/peco).
