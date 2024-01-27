@@ -6,12 +6,9 @@
   },
 
   "fmt": {
-    "files": {
-      "exclude": ["README.md"]
-    },
-    "options": {
-      "useTabs": false,
-      "lineWidth": 160
-    }
+    "exclude": ["README.md"],
+    "useTabs": false,
+    "lineWidth": 160,
+    "semiColons": false
   }
 }
