@@ -1,11 +1,10 @@
 name: Test
 
 on:
-  pull_request:
-    branches: 
+  push:
+    branches:
       - main
-    paths-ignore:
-      - '**.md'
+  pull_request:
   workflow_dispatch:
 
 jobs:
