@@ -1,0 +1,28 @@
+name: Update
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  main:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: 1.x
+      - run: deno task update:commit
+      - uses: peter-evans/create-pull-request@v4
+        id: cpr
+        with:
+          commit-message: "build: update dependancy"
+          title: "build: update dependancy"
+          base: main
+          branch: update-dependancy
+          delete-branch: true
+      - run: gh pr merge --merge --auto "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
