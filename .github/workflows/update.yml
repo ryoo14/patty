@@ -1,28 +1,37 @@
 name: Update
 
 on:
-  #schedule:
-  #  - cron: "0 0 * * *"
+  schedule:
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
   main:
-    name: Test
+    name: update dependency
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1
         with:
           deno-version: 1.x
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git switch -C update-dependency
       - run: deno task update:commit
-      - uses: peter-evans/create-pull-request@v4
-        id: cpr
-        with:
-          commit-message: "build: update dependancy"
-          title: "build: update dependancy"
-          base: main
-          branch: update-dependancy
-          delete-branch: true
-      - run: gh pr merge --merge --auto "${{ steps.cpr.outputs.pull-request-number }}"
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - run: |
+          if git diff --quiet main..update-dependency; then
+            echo "rn=false" >> $GITHUB_OUTPUT
+          else
+            echo "rn=true" >> $GITHUB_OUTPUT
+          fi
+        id: check_update
+      - run: git push -u origin update-dependency
+        if: steps.check_update.outputs.rn == 'true'
+      - run: |
+          gh pr create -B main -t "Update Dependency" -b "" -l "dependencies"
+        if: steps.check_update.outputs.rn == 'true'
+      - run: gh pr merge --merge --auto
+        if: steps.check_update.outputs.rn == 'true'
