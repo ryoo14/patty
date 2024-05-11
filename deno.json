@@ -6,6 +6,14 @@
     "update": "deno run --allow-env --allow-read --allow-write --allow-run=git,deno --allow-net=deno.land,jsr.io,registry.npmjs.org jsr:@molt/cli ./*.ts",
     "update:commit": "deno task -q update --commit --pre-commit=fmt,lint --prefix='build:'"
   },
+  "imports": {
+    "dir": "https://deno.land/x/dir@1.5.2/mod.ts",
+    "cliffy": "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts",
+    "fs": "https://deno.land/std@0.224.0/fs/mod.ts",
+    "path": "https://deno.land/std@0.224.0/path/mod.ts",
+    "dax": "https://deno.land/x/dax@0.39.2/mod.ts",
+    "assert": "https://deno.land/std@0.224.0/assert/mod.ts"
+  },
   "fmt": {
     "exclude": ["README.md"],
     "useTabs": false,
