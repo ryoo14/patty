@@ -1,7 +1,7 @@
 import dir from "dir"
 import { Command, HelpCommand } from "cliffy"
-import { ensureDir, walk } from "fs"
-import { dirname, join, relative } from "path"
+import { ensureDir, walk } from "@std/fs"
+import { dirname, join, relative } from "@std/path"
 
 new Command()
   .name("patty")

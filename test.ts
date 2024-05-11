@@ -1,5 +1,5 @@
-import { assertEquals, assertMatch, assertNotEquals } from "assert"
-import { CommandBuilder } from "dax"
+import { assertEquals, assertMatch, assertNotEquals } from "@std/assert"
+import { CommandBuilder } from "@david/dax"
 
 function pattyTest(
   testName: string,
