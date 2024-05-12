@@ -3,7 +3,7 @@
     "dev": "deno fmt && deno lint && deno task test --fail-fast",
     "run": "deno run --allow-read --allow-write --allow-env --allow-run patty.ts",
     "test": "deno test --allow-read --allow-write --allow-env --allow-run --allow-net",
-    "update": "deno run --allow-env --allow-read --allow-write --allow-run=git,deno --allow-net=deno.land,jsr.io,registry.npmjs.org jsr:@molt/cli ./*.ts",
+    "update": "deno run --allow-env --allow-read --allow-write --allow-run=git,deno --allow-net=deno.land,jsr.io,registry.npmjs.org jsr:@molt/cli ./deno.json",
     "update:commit": "deno task -q update --commit --pre-commit=fmt,lint --prefix='build:'"
   },
   "imports": {
