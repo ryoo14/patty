@@ -20,7 +20,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git switch -C update-dependency
-          git pull origin/main update-dependency
+          git pull main update-dependency
       - run: deno task update:commit
       - run: |
           if git diff --quiet main..update-dependency; then
