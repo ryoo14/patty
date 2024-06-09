@@ -20,7 +20,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git switch -C update-dependency
-          git pull
+          git pull -u origin/update-dependency update-dependency
       - run: deno task update:commit
       - run: |
           if git diff --quiet main..update-dependency; then
@@ -31,8 +31,9 @@ jobs:
         id: check_update
       - run: git push -u origin update-dependency
         if: steps.check_update.outputs.rn == 'true'
-      - run: |
-          gh pr create -B main -t "Update Dependency" -b "" -l "dependencies"
+      - run: gh pr create -B main -t "Update Dependency" -b "" -l "dependencies"
+        if: steps.check_update.outputs.rn == 'true'
+      - run: sleep 60
         if: steps.check_update.outputs.rn == 'true'
       - run: gh pr merge --merge --auto
         if: steps.check_update.outputs.rn == 'true'
