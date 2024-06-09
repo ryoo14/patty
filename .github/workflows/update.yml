@@ -9,8 +9,6 @@ jobs:
   main:
     name: update dependency
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: "${{ secrets.PAT }}"
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v1
@@ -29,11 +27,23 @@ jobs:
             echo "rn=true" >> $GITHUB_OUTPUT
           fi
         id: check_update
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.GENERATE_TOKEN_ID }}
+          private-key: ${{ secrets.GENERATE_TOKEN_SECRET }}
+        if: steps.check_update.outputs.rn == 'true'
       - run: git push -u origin update-dependency
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
       - run: gh pr create -B main -t "Update Dependency" -b "" -l "dependencies"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
       - run: sleep 60
         if: steps.check_update.outputs.rn == 'true'
       - run: gh pr merge --merge --auto
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
