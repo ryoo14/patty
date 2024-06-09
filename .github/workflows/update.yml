@@ -18,7 +18,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git switch -C update-dependency
-          git merge main
       - run: deno task update:commit
       - run: |
           if git diff --quiet main..update-dependency; then
@@ -33,7 +32,7 @@ jobs:
           app-id: ${{ secrets.GENERATE_TOKEN_ID }}
           private-key: ${{ secrets.GENERATE_TOKEN_SECRET }}
         if: steps.check_update.outputs.rn == 'true'
-      - run: git push -u origin update-dependency
+      - run: git push -f origin update-dependency
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
@@ -43,7 +42,7 @@ jobs:
         if: steps.check_update.outputs.rn == 'true'
       - run: sleep 60
         if: steps.check_update.outputs.rn == 'true'
-      - run: gh pr merge --merge --auto
+      - run: gh pr merge --merge --auto --delete-branch
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
