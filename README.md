@@ -13,14 +13,14 @@ Inspired by [ghq](https://github.com/x-motemen/ghq).
 ## Installation
 
 ```sh
-deno install -A https://deno.land/x/patty@v0.8.5/patty.ts
+deno install -A https://deno.land/x/patty@v0.8.6/patty.ts
 ```
 
 ## Usage
 
 ```
   Usage:   patty
-  Version: 0.8.5
+  Version: 0.8.6
 
   Description:
 
