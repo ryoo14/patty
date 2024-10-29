@@ -1,5 +1,6 @@
 import dir from "dir"
-import { Command, HelpCommand } from "cliffy"
+import { Command } from "@cliffy/command"
+import { HelpCommand } from "@cliffy/command/help"
 import { ensureDir, walk } from "@std/fs"
 import { dirname, join, relative } from "@std/path"
 
