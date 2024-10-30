@@ -42,7 +42,7 @@ pattyTest("getDefault", async () => {
 })
 
 pattyTest("getOnlyUserAndRepo", async () => {
-  await builder.command("deno run -A main.ts get -q ryoo14/test_repo").spawn()
+  await builder.command("deno run -A main.ts get -q github.com/ryoo14/test_repo").spawn()
   assertMatch(
     await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/test_repo").text(),
     /\/patty\/github.com\/ryoo14\/test_repo/,

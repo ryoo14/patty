@@ -13,7 +13,7 @@ Inspired by [ghq](https://github.com/x-motemen/ghq).
 ## Installation
 
 ```sh
-deno install -A https://deno.land/x/patty@v0.9.0/patty.ts --name patty
+deno install --global -A jsr:@patty/patty
 ```
 
 ## Usage
