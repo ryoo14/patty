@@ -20,7 +20,7 @@ deno install --global -A jsr:@patty/patty
 
 ```
   Usage:   patty
-  Version: 0.9.0
+  Version: 0.9.1
 
   Description:
 
