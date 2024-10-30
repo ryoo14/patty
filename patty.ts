@@ -1,4 +1,3 @@
-import dir from "dir"
 import { Command } from "@cliffy/command"
 import { HelpCommand } from "@cliffy/command/help"
 import { ensureDir, walk } from "@std/fs"
@@ -48,7 +47,7 @@ type RemoteRepositoryServiceUrls = {
 
 // utility functions
 const getPattyRoot = () => {
-  const home = dir("home")
+  const home = Deno.env.get("HOME")
   const homePattyRoot = home ? join(home, "patty") : undefined
   const pattyRoot = Deno.env.get("PATTY_ROOT") ?? homePattyRoot
   if (!pattyRoot) {
