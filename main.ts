@@ -5,7 +5,7 @@ import { dirname, join, relative } from "@std/path"
 
 new Command()
   .name("patty")
-  .version("0.8.8")
+  .version("0.9.0")
   .description("a CLI tool for managing git and working directories written in Deno.")
   .default("help")
   // Create
