@@ -19,7 +19,7 @@ const builder = new CommandBuilder()
 // help
 pattyTest("help", async () => {
   assertMatch(
-    await builder.command("deno run -A patty.ts help").text(),
+    await builder.command("deno run -A main.ts help").text(),
     /patty/,
   )
 })
@@ -27,14 +27,14 @@ pattyTest("help", async () => {
 // root
 pattyTest("root", async () => {
   assertMatch(
-    await builder.command("deno run -A patty.ts root").text(),
+    await builder.command("deno run -A main.ts root").text(),
     /\/patty/,
   )
 })
 
 // get
 pattyTest("getDefault", async () => {
-  await builder.command("deno run -A patty.ts get -q https://github.com/ryoo14/patty").spawn()
+  await builder.command("deno run -A main.ts get -q https://github.com/ryoo14/patty").spawn()
   assertMatch(
     await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/patty").text(),
     /\/patty\/github.com\/ryoo14\/patty/,
@@ -42,7 +42,7 @@ pattyTest("getDefault", async () => {
 })
 
 pattyTest("getOnlyUserAndRepo", async () => {
-  await builder.command("deno run -A patty.ts get -q ryoo14/test_repo").spawn()
+  await builder.command("deno run -A main.ts get -q ryoo14/test_repo").spawn()
   assertMatch(
     await builder.command("ls -d $PATTY_ROOT/github.com/ryoo14/test_repo").text(),
     /\/patty\/github.com\/ryoo14\/test_repo/,
@@ -50,7 +50,7 @@ pattyTest("getOnlyUserAndRepo", async () => {
 })
 
 pattyTest("getSpecifiedBranch", async () => {
-  await builder.command("deno run -A patty.ts get -b test_branch -q https://github.com/ryoo14/test_repo").spawn()
+  await builder.command("deno run -A main.ts get -b test_branch -q https://github.com/ryoo14/test_repo").spawn()
   const branches = await builder.command("git -C $PATTY_ROOT/github.com/ryoo14/test_repo branch").lines()
   assertEquals(branches.length, 1)
   assertEquals(branches[0], "* test_branch")
@@ -58,7 +58,7 @@ pattyTest("getSpecifiedBranch", async () => {
 
 // create
 pattyTest("create", async () => {
-  await builder.command("deno run -A patty.ts create create/testDir").spawn()
+  await builder.command("deno run -A main.ts create create/testDir").spawn()
   assertEquals(
     await builder.command("ls $PATTY_ROOT/create").text(),
     "testDir",
@@ -66,7 +66,7 @@ pattyTest("create", async () => {
 })
 
 pattyTest("createAndGitInit", async () => {
-  await builder.command("deno run -A patty.ts create -g create/testDir2").spawn()
+  await builder.command("deno run -A main.ts create -g create/testDir2").spawn()
   assertMatch(
     await builder.command("ls -a $PATTY_ROOT/create/testDir2").text(),
     /\.git/,
@@ -75,21 +75,21 @@ pattyTest("createAndGitInit", async () => {
 
 // list
 pattyTest("shortList", async () => {
-  await builder.command("deno run -A patty.ts create create/testDir").spawn()
-  const result = await builder.command("deno run -A patty.ts list").text()
+  await builder.command("deno run -A main.ts create create/testDir").spawn()
+  const result = await builder.command("deno run -A main.ts list").text()
   assertEquals(result, "create/testDir")
 })
 
 pattyTest("fullList", async () => {
-  await builder.command("deno run -A patty.ts create create/testDir").spawn()
-  const result = await builder.command("deno run -A patty.ts list --full-path").text()
+  await builder.command("deno run -A main.ts create create/testDir").spawn()
+  const result = await builder.command("deno run -A main.ts list --full-path").text()
   assertMatch(result, /\/patty\/create\/testDir/)
 })
 
 pattyTest("depthList", async () => {
-  await builder.command("deno run -A patty.ts create create/hoge/fuga/depthTestDir").spawn()
-  let result = await builder.command("deno run -A patty.ts list").text()
+  await builder.command("deno run -A main.ts create create/hoge/fuga/depthTestDir").spawn()
+  let result = await builder.command("deno run -A main.ts list").text()
   assertNotEquals(result, "create/hoge/fuga/depthTestDir")
-  result = await builder.command("deno run -A patty.ts list -d 5").text()
+  result = await builder.command("deno run -A main.ts list -d 5").text()
   assertEquals(result, "create/hoge/fuga/depthTestDir")
 })
