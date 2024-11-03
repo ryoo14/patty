@@ -1,8 +1,6 @@
 # Patty
 
-<p align="center">
-  <img src="logo.svg" width="30%">
-</p>
+<img src="logo.svg" height="150px" alt="patty logo">
 
 `patty` is a CLI tool for managing git and working directories written in Deno.
 
