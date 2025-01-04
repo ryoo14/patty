@@ -1,5 +1,5 @@
 {
-  "name": "@patty/patty",
+  "name": "@ryoo/patty",
   "version": "0.9.1",
   "exports": "./main.ts",
   "tasks": {
