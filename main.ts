@@ -180,7 +180,7 @@ const root = () => {
 try {
   await new Command()
     .name("patty")
-    .version("0.9.1")
+    .version("0.10.0")
     .description("a CLI tool for managing git and working directories written in Deno.")
     .default("help")
     // Create
