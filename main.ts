@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command"
 import { HelpCommand } from "@cliffy/command/help"
 import { ensureDir, walk } from "@std/fs"
-import { dirname, join, relative } from "@std/path"
+import { dirname, join, relative, resolve } from "@std/path"
 
 new Command()
   .name("patty")
@@ -108,7 +108,7 @@ const create = (options: Options, dir: string) => {
         args: [
           "init",
           "-q",
-          targetDir
+          targetDir,
         ],
       },
     )
@@ -117,15 +117,18 @@ const create = (options: Options, dir: string) => {
 }
 
 const get = async (options: Options, url: string) => {
-  const gitOptions: Array<string> = []
-  for (const [key, value] of Object.entries(options)) {
-    if (value) {
-      if (value === true) {
-        gitOptions.push(`--${key}`)
-      } else {
-        gitOptions.push(`--${key} ${value}`)
-      }
-    }
+  // Safe git options processing
+  const gitArgs = ["clone"]
+
+  // Only allow specific, safe options
+  if (options.branch) {
+    gitArgs.push("--branch", options.branch)
+  }
+  if (options.depth) {
+    gitArgs.push("--depth", options.depth.toString())
+  }
+  if (options.quiet) {
+    gitArgs.push("--quiet")
   }
 
   const scheme_flag = url.match(/^(https|git):\/\//)
@@ -153,19 +156,26 @@ const get = async (options: Options, url: string) => {
       Deno.exit(1)
     }
   }
-  const pattyRoot = getPattyRoot()
-  const command = `git clone ${gitOptions.join(" ")} ${scheme}://${authority} ${pattyRoot}/${authority}`
-  const gitProcess = new Deno.Command(
-    "bash",
-    {
-      args: [
-        "-c",
-        command,
-      ],
-    },
-  )
 
-  gitProcess.spawn()
+  // Path traversal protection
+  const pattyRoot = getPattyRoot()
+  const targetPath = resolve(pattyRoot, authority)
+
+  if (!targetPath.startsWith(pattyRoot + "/") && targetPath !== pattyRoot) {
+    throw new Error("Path traversal detected: invalid repository path")
+  }
+
+  // Safe git clone execution
+  gitArgs.push(`${scheme}://${authority}`, targetPath)
+
+  const gitProcess = new Deno.Command("git", {
+    args: gitArgs,
+  })
+
+  const result = await gitProcess.output()
+  if (!result.success) {
+    throw new Error(`Git clone failed: ${new TextDecoder().decode(result.stderr)}`)
+  }
 }
 
 const list = async (option: Options) => {
