@@ -99,7 +99,12 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 // commands functions
 const create = async (options: Options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir)
-  ensureDir(join(targetDir, ".patty"))
+  
+  try {
+    await ensureDir(join(targetDir, ".patty"))
+  } catch (error) {
+    throw new Error(`Failed to create directory: ${error.message}`)
+  }
 
   if (options.gitInit) {
     const gitProcess = new Deno.Command(
