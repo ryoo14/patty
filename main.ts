@@ -65,6 +65,33 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
   return authority
 }
 
+async function parseUrlToSchemeAuthority(url: string): Promise<[string, string]> {
+  const scheme_flag = url.match(/^(https|git):\/\//)
+
+  if (scheme_flag) {
+    const [scheme, authority] = url.split("://")
+    return [scheme, authority]
+  }
+
+  const slashNum = url.match(/\//g)?.length ?? 0
+  if (slashNum === 2) {
+    return ["https", url]
+  } else if (slashNum === 1) {
+    const [user, repo] = url.split("/") as [string, string]
+    const authority = await repositoryExists(user, repo)
+    if (!authority) {
+      throw new Error(
+        "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
+      )
+    }
+    return ["https", authority]
+  } else {
+    throw new Error(
+      "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
+    )
+  }
+}
+
 // commands functions
 const create = async (options: Options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir)
@@ -109,29 +136,7 @@ const get = async (options: Options, url: string) => {
     gitArgs.push("--quiet")
   }
 
-  const scheme_flag = url.match(/^(https|git):\/\//)
-  let scheme, authority: string
-  if (scheme_flag) {
-    ;[scheme, authority] = url.split("://")
-  } else {
-    // TODO: function
-    const slashNum = url.match(/\//g)?.length ?? 0
-    if (slashNum === 2) {
-      ;[scheme, authority] = ["https", url]
-    } else if (slashNum === 1) {
-      const [user, repo] = url.split("/")
-      ;[scheme, authority] = ["https", await repositoryExists(user, repo)]
-      if (!authority) {
-        throw new Error(
-          "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
-        )
-      }
-    } else {
-      throw new Error(
-        "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
-      )
-    }
-  }
+  const [scheme, authority] = await parseUrlToSchemeAuthority(url)
 
   // Path traversal protection
   const pattyRoot = getPattyRoot()
