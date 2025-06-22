@@ -11,7 +11,7 @@ Inspired by [ghq](https://github.com/x-motemen/ghq).
 ## Installation
 
 ```sh
-deno install --global -A jsr:@patty/patty
+deno install --global -A jsr:@ryoo/patty
 ```
 
 ## Usage
