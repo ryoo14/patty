@@ -1,6 +1,6 @@
 {
   "name": "@ryoo/patty",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "exports": "./main.ts",
   "tasks": {
     "dev": "deno fmt && deno lint && deno task test --fail-fast",
