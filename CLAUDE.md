@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Core Commands
+
 - **Development**: `deno task dev` - Runs format, lint, and test with fail-fast
 - **Run locally**: `deno task run` - Execute patty with required permissions
 - **Testing**: `deno task test` - Run full test suite with all required permissions
@@ -12,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Update with commit**: `deno task update:commit` - Update deps and auto-commit with formatting
 
 ### Manual Commands
+
 - **Format**: `deno fmt`
 - **Lint**: `deno lint`
 - **Direct execution**: `deno run --allow-read --allow-write --allow-env --allow-run main.ts [command]`
@@ -23,16 +25,19 @@ This is a single-file CLI application (`main.ts`) built with Deno that manages G
 ### Core Components
 
 **Command Structure**: Built using Cliffy command framework with four main commands:
+
 - `get`: Clone remote repositories with intelligent URL parsing
-- `create`: Create non-git managed working directories  
+- `create`: Create non-git managed working directories
 - `list`: Display managed directories with filtering options
 - `root`: Show configuration root path
 
-**Directory Management**: The application maintains a workspace under `PATTY_ROOT` (default: `$HOME/patty`) and identifies managed directories by presence of `.git` or `.patty` markers.
+**Directory Management**: The application maintains a workspace under `PATTY_ROOT` (default: `$HOME/patty`) and identifies managed directories by presence of
+`.git` or `.patty` markers.
 
 **URL Resolution**: The `get` command supports multiple URL formats:
+
 - Full URLs: `https://github.com/user/repo`
-- Short URLs: `github.com/user/repo` 
+- Short URLs: `github.com/user/repo`
 - User/repo format: `user/repo` (auto-detects GitHub/GitLab)
 
 **Repository Detection**: Uses GitHub and GitLab APIs to automatically detect repository existence when using short formats.
@@ -46,6 +51,7 @@ This is a single-file CLI application (`main.ts`) built with Deno that manages G
 ### Testing Architecture
 
 Tests use a custom `pattyTest()` wrapper that:
+
 - Creates temporary directories for isolation
 - Sets up `PATTY_ROOT` environment variable
 - Cleans up after each test
