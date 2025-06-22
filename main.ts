@@ -115,7 +115,7 @@ const get = async (options: Options, url: string) => {
     ;[scheme, authority] = url.split("://")
   } else {
     // TODO: function
-    const slashNum = url.match(/\//g)?.length
+    const slashNum = url.match(/\//g)?.length ?? 0
     if (slashNum === 2) {
       ;[scheme, authority] = ["https", url]
     } else if (slashNum === 1) {
