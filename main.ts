@@ -162,7 +162,6 @@ const get = async (options: Options, url: string) => {
 const list = async (option: Options) => {
   const pattySet: Set<string> = await getPattyDirs(option.depth)
 
-  // for!for!
   if (option.fullPath) {
     for (const l of pattySet) {
       console.log(l)
