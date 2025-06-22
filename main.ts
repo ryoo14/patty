@@ -102,13 +102,13 @@ const create = (options: Options, dir: string) => {
   ensureDir(join(targetDir, ".patty"))
 
   if (options.gitInit) {
-    const command = `git init -q ${targetDir}`
     const gitProcess = new Deno.Command(
-      "bash",
+      "git",
       {
         args: [
-          "-c",
-          command,
+          "init",
+          "-q",
+          targetDir
         ],
       },
     )
