@@ -11,7 +11,7 @@ new Command()
   // Create
   .command("create <dir:string>", "Create a working but non-git managed directory.")
   .option("-g, --git-init", "Initialize git repository.")
-  .action((options, dir) => create(options, dir))
+  .action(async (options, dir) => await create(options, dir))
   // Get
   .command("get <url:string>", "Get a git repository from remote repository services.")
   .option("-b, --branch <branch:string>", "Get Specified branch.")
@@ -97,7 +97,7 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 }
 
 // commands functions
-const create = (options: Options, dir: string) => {
+const create = async (options: Options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir)
   ensureDir(join(targetDir, ".patty"))
 
@@ -112,7 +112,11 @@ const create = (options: Options, dir: string) => {
         ],
       },
     )
-    gitProcess.spawn()
+    
+    const result = await gitProcess.output()
+    if (!result.success) {
+      throw new Error(`Git init failed: ${new TextDecoder().decode(result.stderr)}`)
+    }
   }
 }
 
