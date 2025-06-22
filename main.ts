@@ -3,35 +3,6 @@ import { HelpCommand } from "@cliffy/command/help"
 import { ensureDir, walk } from "@std/fs"
 import { dirname, join, relative, resolve } from "@std/path"
 
-new Command()
-  .name("patty")
-  .version("0.9.1")
-  .description("a CLI tool for managing git and working directories written in Deno.")
-  .default("help")
-  // Create
-  .command("create <dir:string>", "Create a working but non-git managed directory.")
-  .option("-g, --git-init", "Initialize git repository.")
-  .action(async (options, dir) => await create(options, dir))
-  // Get
-  .command("get <url:string>", "Get a git repository from remote repository services.")
-  .option("-b, --branch <branch:string>", "Get Specified branch.")
-  .option("-d, --depth <depth:number>", "Create a shallow clone of that depth.")
-  .option("-q, --quiet", "Suppress output.")
-  .example("full url", "patty get https://github.com/user/repo")
-  .example("short url", "patty get github.com/user/repo")
-  .example("user and repo", "patty get user/repo")
-  .action((options, url) => get(options, url))
-  // List
-  .command("list", "Print git and working directories.")
-  .option("-d, --depth <depth:number>", "Specify how many layers of git and tmp directories to target.")
-  .option("-f, --full-path", "Print full paths instead of relative paths.")
-  .action((option) => list(option))
-  // Root
-  .command("root", "Print root path on patty's configuration.")
-  .action(() => root())
-  .command("help", new HelpCommand())
-  .parse()
-
 // types
 type Options = {
   gitInit?: boolean
@@ -51,8 +22,7 @@ const getPattyRoot = () => {
   const homePattyRoot = home ? join(home, "patty") : undefined
   const pattyRoot = Deno.env.get("PATTY_ROOT") ?? homePattyRoot
   if (!pattyRoot) {
-    console.error("Not defined $PATTY_ROOT and $HOME.")
-    Deno.exit(1)
+    throw new Error("Not defined $PATTY_ROOT and $HOME.")
   } else {
     return pattyRoot
   }
@@ -90,8 +60,7 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
       }
     }
   } catch (error) {
-    console.log(error)
-    Deno.exit(1)
+    throw new Error(`Failed to check repository existence: ${error.message}`)
   }
   return authority
 }
@@ -99,7 +68,7 @@ async function repositoryExists(user: string, repo: string): Promise<string> {
 // commands functions
 const create = async (options: Options, dir: string) => {
   const targetDir = join(getPattyRoot(), dir)
-  
+
   try {
     await ensureDir(join(targetDir, ".patty"))
   } catch (error) {
@@ -117,7 +86,7 @@ const create = async (options: Options, dir: string) => {
         ],
       },
     )
-    
+
     const result = await gitProcess.output()
     if (!result.success) {
       throw new Error(`Git init failed: ${new TextDecoder().decode(result.stderr)}`)
@@ -153,16 +122,14 @@ const get = async (options: Options, url: string) => {
       const [user, repo] = url.split("/")
       ;[scheme, authority] = ["https", await repositoryExists(user, repo)]
       if (!authority) {
-        console.log(
+        throw new Error(
           "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
         )
-        Deno.exit(1)
       }
     } else {
-      console.log(
+      throw new Error(
         "Specified repository does not exist. If repository is private, please specify remote repository service domain. e.g. github.com/user/repo",
       )
-      Deno.exit(1)
     }
   }
 
@@ -204,4 +171,38 @@ const list = async (option: Options) => {
 
 const root = () => {
   console.log(getPattyRoot())
+}
+
+try {
+  await new Command()
+    .name("patty")
+    .version("0.9.1")
+    .description("a CLI tool for managing git and working directories written in Deno.")
+    .default("help")
+    // Create
+    .command("create <dir:string>", "Create a working but non-git managed directory.")
+    .option("-g, --git-init", "Initialize git repository.")
+    .action(async (options, dir) => await create(options, dir))
+    // Get
+    .command("get <url:string>", "Get a git repository from remote repository services.")
+    .option("-b, --branch <branch:string>", "Get Specified branch.")
+    .option("-d, --depth <depth:number>", "Create a shallow clone of that depth.")
+    .option("-q, --quiet", "Suppress output.")
+    .example("full url", "patty get https://github.com/user/repo")
+    .example("short url", "patty get github.com/user/repo")
+    .example("user and repo", "patty get user/repo")
+    .action((options, url) => get(options, url))
+    // List
+    .command("list", "Print git and working directories.")
+    .option("-d, --depth <depth:number>", "Specify how many layers of git and tmp directories to target.")
+    .option("-f, --full-path", "Print full paths instead of relative paths.")
+    .action((option) => list(option))
+    // Root
+    .command("root", "Print root path on patty's configuration.")
+    .action(() => root())
+    .command("help", new HelpCommand())
+    .parse()
+} catch (error) {
+  console.error(error.message)
+  Deno.exit(1)
 }
