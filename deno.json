@@ -18,7 +18,8 @@
   },
   "fmt": {
     "exclude": [
-      "README.md"
+      "README.md",
+      "logo.svg"
     ],
     "useTabs": false,
     "lineWidth": 160,
