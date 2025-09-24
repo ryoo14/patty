@@ -6,7 +6,7 @@ import type { RemoteRepositoryServiceUrls } from "./types.ts"
 export const getPattyRoot = () => {
   const home = Deno.env.get("HOME")
   const homePattyRoot = home ? join(home, "patty") : undefined
-  const pattyRoot = Deno.env.get("PATTY_ROOT") ?? homePattyRoot
+  const pattyRoot = Deno.env.get("PATTY_ROOT") || homePattyRoot
   if (!pattyRoot) {
     throw new Error("Not defined $PATTY_ROOT and $HOME.")
   } else {
