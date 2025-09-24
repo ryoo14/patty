@@ -14,8 +14,8 @@ Inspired by [ghq](https://github.com/x-motemen/ghq).
 deno install --global \
   --allow-run=git \
   --allow-env=HOME,PATTY_ROOT \
-  --allow-read="${HOME}/patty","${PATTY_ROOT:-$HOME}/patty" \
-  --allow-write="${HOME}/patty","${PATTY_ROOT:-$HOME}/patty" \
+  --allow-read="${HOME}/patty","${PATTY_ROOT:-$HOME/patty}" \
+  --allow-write="${HOME}/patty","${PATTY_ROOT:-$HOME/patty}" \
   --allow-net=github.com,api.github.com,gitlab.com \
   jsr:@ryoo/patty
 
