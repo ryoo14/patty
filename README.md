@@ -11,7 +11,17 @@ Inspired by [ghq](https://github.com/x-motemen/ghq).
 ## Installation
 
 ```sh
-deno install --global -A jsr:@ryoo/patty
+deno install --global \
+  --allow-run=git \
+  --allow-env=HOME,PATTY_ROOT \
+  --allow-read="${HOME}/patty","${PATTY_ROOT:-$HOME}/patty" \
+  --allow-write="${HOME}/patty","${PATTY_ROOT:-$HOME}/patty" \
+  --allow-net=github.com,api.github.com,gitlab.com \
+  jsr:@ryoo/patty
+
+or
+
+deno intall --global -A jsr:@ryoo/patty
 ```
 
 ## Usage
