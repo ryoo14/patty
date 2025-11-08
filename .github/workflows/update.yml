@@ -22,7 +22,7 @@ jobs:
       - run: deno outdated --update --latest
       - uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: 'build: bump version deno imports'
+          commit-message: "build: bump version deno imports"
           branch: update-deno-imports
           delete-branch: true
-          title: 'build: bump version deno imports'
+          title: "build: bump version deno imports"
