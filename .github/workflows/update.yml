@@ -2,47 +2,27 @@ name: Update Dependency
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 0 1 * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   main:
     name: update dependency
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
         with:
           deno-version: 2.x
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git switch -C update-dependency
-      - run: deno task update:commit
-      - run: |
-          if git diff --quiet main..update-dependency; then
-            echo "rn=false" >> $GITHUB_OUTPUT
-          else
-            echo "rn=true" >> $GITHUB_OUTPUT
-          fi
-        id: check_update
-      - uses: actions/create-github-app-token@v1
-        id: app-token
+      - run: deno outdated --update --latest
+      - uses: peter-evans/create-pull-request@v7
         with:
-          app-id: ${{ secrets.GENERATE_TOKEN_ID }}
-          private-key: ${{ secrets.GENERATE_TOKEN_SECRET }}
-        if: steps.check_update.outputs.rn == 'true'
-      - run: git push -f origin update-dependency
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        if: steps.check_update.outputs.rn == 'true'
-      - run: gh pr create -B main -t "Update Dependency" -b "" -l "dependencies"
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        if: steps.check_update.outputs.rn == 'true'
-      - run: sleep 60
-        if: steps.check_update.outputs.rn == 'true'
-      - run: gh pr merge --merge --auto --delete-branch
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        if: steps.check_update.outputs.rn == 'true'
+          commit-message: 'build: bump version deno imports'
+          branch: update-deno-imports
+          delete-branch: true
+          title: 'build: bump version deno imports'
