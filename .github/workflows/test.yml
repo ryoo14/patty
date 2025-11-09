@@ -2,36 +2,37 @@ name: Test
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
 jobs:
   test:
-    name: Test
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
+        os: [ubuntu-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Deno
+      - name: Setup Deno v2
         uses: denoland/setup-deno@v2
         with:
-          deno-version: 2.x
-
-      - name: Format
+          deno-version: v2.x
+      - name: Check formatting
+        id: fmt
         run: deno fmt --check
-
-      - name: Lint
+        continue-on-error: true
+      - name: Lint code
+        id: lint
         run: deno lint
-
-      - name: Test
+        continue-on-error: true
+      - name: Run tests
+        id: test
         run: deno task test
+        continue-on-error: true
+      - name: Check for failures
+        if: steps.fmt.outcome == 'failure' || steps.lint.outcome == 'failure' || steps.test.outcome == 'failure'
+        run: exit 1
