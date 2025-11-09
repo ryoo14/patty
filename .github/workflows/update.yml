@@ -23,7 +23,7 @@ jobs:
           git config user.email github-actions@github.com
           git switch -C update-dependencies
       - name: Update Dependencies
-        run: deno outdated --update --latest 2>&1 | grep "^Updated" -A 100 > update_result.txt || true
+        run: deno outdated --update --latest
       - name: Refresh deno.lock
         run: deno cache --reload main.ts
       - name: Commit changes
@@ -32,7 +32,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "rn=false" >> $GITHUB_OUTPUT
           else
-            echo -e "Update dependencies\n\n$(cat update_result.txt)" | git commit -F -
+            git commit -m "Update Dependencies"
             echo "rn=true" >> $GITHUB_OUTPUT
           fi
         id: check_update
