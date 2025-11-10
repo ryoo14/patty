@@ -23,7 +23,10 @@ jobs:
           git config user.email github-actions@github.com
           git switch -C update-dependencies
       - name: Update Dependencies
-        run: deno outdated --update --latest
+        run: deno outdated --update --latest 2>&1 | grep "^Updated" -A 100 > update_result.txt || true
+        # disable ansi colorize
+        env:
+          NO_COLOR: "1"
       - name: Refresh deno.lock
         run: deno cache --reload main.ts
       - name: Commit changes
@@ -32,7 +35,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "rn=false" >> $GITHUB_OUTPUT
           else
-            git commit -m "Update Dependencies"
+            echo -e "Update dependencies\n\n$(cat update_result.txt)" | git commit -F -
             echo "rn=true" >> $GITHUB_OUTPUT
           fi
         id: check_update
@@ -49,7 +52,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
       - name: Create Pull Request
-        run: gh pr create -B main -t "Update Dependencies" -b "" -l "dependencies"
+        run: gh pr create -B main -t "Update Dependencies" -b "$(cat update_result.txt)" -l "dependencies"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         if: steps.check_update.outputs.rn == 'true'
