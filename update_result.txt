@@ -1,2 +1,0 @@
-Updated 1 dependency:
- - jsr:@std/assert 1.0.13 -> 1.0.15
