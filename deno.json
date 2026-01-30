@@ -9,7 +9,7 @@
   },
   "imports": {
     "@david/dax": "jsr:@david/dax@0.44.2",
-    "@std/assert": "jsr:@std/assert@1.0.17",
+    "@std/assert": "jsr:@std/assert@1.0.18",
     "@std/fs": "jsr:@std/fs@1.0.22",
     "@std/path": "jsr:@std/path@1.1.4",
     "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.8"
