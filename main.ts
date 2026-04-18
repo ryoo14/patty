@@ -5,7 +5,7 @@ import { create, get, list, root } from "./commands.ts"
 try {
   await new Command()
     .name("patty")
-    .version("0.11.2")
+    .version("0.11.3")
     .description("a CLI tool for managing git and working directories written in Deno.")
     .default("help")
     // Create
