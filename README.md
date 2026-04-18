@@ -28,7 +28,7 @@ deno intall --global -A jsr:@ryoo/patty
 
 ```
   Usage:   patty
-  Version: 0.11.2
+  Version: 0.11.3
 
   Description:
 
