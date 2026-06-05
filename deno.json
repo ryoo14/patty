@@ -8,11 +8,11 @@
     "test": "deno test --allow-read --allow-write --allow-env --allow-run --allow-net"
   },
   "imports": {
-    "@david/dax": "jsr:@david/dax@0.48.1",
+    "@david/dax": "jsr:@david/dax@0.48.3",
     "@std/assert": "jsr:@std/assert@1.0.19",
     "@std/fs": "jsr:@std/fs@1.0.24",
     "@std/path": "jsr:@std/path@1.1.5",
-    "@cliffy/command": "jsr:@cliffy/command@1.1.0"
+    "@cliffy/command": "jsr:@cliffy/command@1.2.1"
   },
   "fmt": {
     "exclude": [
